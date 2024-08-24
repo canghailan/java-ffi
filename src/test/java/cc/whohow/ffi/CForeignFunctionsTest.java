@@ -1,6 +1,6 @@
 package cc.whohow.ffi;
 
-import cc.whohow.ffi.provider.antlr.CHeaderForeignFunctions;
+import cc.whohow.ffi.provider.antlr.CForeignFunctions;
 import cc.whohow.ffi.provider.antlr.CHeaderParser;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.*;
@@ -12,7 +12,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.StringWriter;
 
-public class CHeaderForeignFunctionsTest {
+public class CForeignFunctionsTest {
     @Test
     public void test() throws Throwable {
         // https://github.com/libvips/build-win64-mxe/releases
@@ -20,7 +20,7 @@ public class CHeaderForeignFunctionsTest {
         System.out.println(System.getenv("PATH"));
         System.loadLibrary("libvips-42");
 
-        var ffi = new CHeaderForeignFunctions("""
+        var ffi = new CForeignFunctions("""
                 int vips_version(int flag);
                 """);
 
