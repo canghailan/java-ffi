@@ -1,5 +1,7 @@
 # Java [Foreign Function & Memory API](https://openjdk.org/jeps/454) 工具
 
+FFI 基本调用流程：
+
 1. 加载动态链接库
 2. 查找函数地址，构造函数签名 FunctionDescriptor
 3. 生成 MethodHandle
@@ -8,11 +10,14 @@
 其中构造函数签名工作量较大，JDK 提供了 [jextract](https://jdk.java.net/jextract/) 工具，
 可以通过 C 头文件 自动生成 Java 代码。
 但生成的文件可读性太差，且不易维护，
-因此考虑用其他方式实现。
+即使考虑性能问题，未来通过 [Class-File API](https://openjdk.org/jeps/457) 动态生成也许是更好的选择。
+目前考虑用其他方式实现。
 
 1. 配置文件，比如 XML： 可与 MemoryLayout 构造方法一一对应，实现简单
 2. C 头文件：通过 ANTLR 等工具解析，生成配置文件
 3. 反射：通过反射获取方法返回类型及参数类型，配合注解，生成 FunctionDescriptor
+
+此外，参数、返回值构造、读取（序列化、反序列化）也较麻烦，需一并解决。
 
 ## XML 配置文件
 
