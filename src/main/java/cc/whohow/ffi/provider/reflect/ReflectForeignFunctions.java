@@ -1,6 +1,7 @@
 package cc.whohow.ffi.provider.reflect;
 
 import cc.whohow.ffi.ForeignFunctionInterface;
+import cc.whohow.ffi.ForeignFunctionInvocationHandler;
 
 import java.lang.foreign.FunctionDescriptor;
 import java.lang.foreign.Linker;
@@ -8,6 +9,7 @@ import java.lang.foreign.MemoryLayout;
 import java.lang.foreign.SymbolLookup;
 import java.lang.invoke.MethodHandle;
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -36,6 +38,15 @@ public class ReflectForeignFunctions implements ReflectFunctionFactory, ForeignF
                 downcallHandles.put(method.getName(), methodHandle);
             }
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> T newProxyInstance(Class<T> type) {
+        return (T) Proxy.newProxyInstance(
+                type.getClassLoader(),
+                new Class<?>[]{type},
+                new ForeignFunctionInvocationHandler(new ReflectForeignFunctions(type))
+        );
     }
 
     @Override

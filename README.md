@@ -15,6 +15,7 @@
 3. 反射：通过反射获取方法返回类型及参数类型，配合注解，生成 FunctionDescriptor
 
 ## XML 配置文件
+
 ```xml
 <?xml version="1.0" encoding="UTF-8" ?>
 <declarations>
@@ -40,7 +41,7 @@ public static void main(String[] args) {
     // https://github.com/libvips/build-win64-mxe/releases
     // add libvips to PATH or LD_LIBRARY_PATH
     System.loadLibrary("libvips-42");
-    
+
     var ffi = new CachingForeignFunctionInterface(new DocumentForeignFunctions(document));
 
     var vipsVersion = ffi.downcallHandle("vips_version");
@@ -60,25 +61,26 @@ public static void main(String[] args) {
 ```
 
 ## C 头文件
+
+lib.h
+
 ```c
 int vips_version(int flag);
 ```
 
 ```java
 public static void main(String[] args) {
-    var ffi = new CHeaderForeignFunctions(source);
+    var ffi = new CHeaderForeignFunctions("""
+            int vips_version(int flag);
+            """);
 }
 ```
 
 ## 反射
+
 ```java
 public static void main(String[] args) {
-    var ffi = new ReflectForeignFunctions(Vips.class);
-    var vips = (Vips) Proxy.newProxyInstance(
-            Vips.class.getClassLoader(),
-            new Class[]{Vips.class},
-            new ForeignFunctionInvocationHandler(ffi)
-    );
+    var vips = ReflectForeignFunctions.newProxyInstance(Vips.class);
     System.out.println(vips.vips_version(0));
     System.out.println(vips.vips_version(1));
     System.out.println(vips.vips_version(2));

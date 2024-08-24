@@ -20,8 +20,9 @@ public class CHeaderForeignFunctionsTest {
         System.out.println(System.getenv("PATH"));
         System.loadLibrary("libvips-42");
 
-        var source = CHeaderParser.Source.readClasspath("/test.h");
-        var ffi = new CHeaderForeignFunctions(source);
+        var ffi = new CHeaderForeignFunctions("""
+                int vips_version(int flag);
+                """);
 
         System.out.println(ffi.downcall("vips_version", 0));
         System.out.println(ffi.downcall("vips_version", 1));
