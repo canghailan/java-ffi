@@ -70,7 +70,7 @@ int vips_version(int flag);
 
 ```java
 public static void main(String[] args) {
-    var ffi = new CHeaderForeignFunctions("""
+    var ffi = new CForeignFunctions("""
             int vips_version(int flag);
             """);
 }
